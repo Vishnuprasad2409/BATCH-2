@@ -1,0 +1,33 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+from textblob import TextBlob
+
+# Load the dataset
+df = pd.read_csv("sentimentdataset.csv")
+
+# Preview the data
+print(df.head())
+
+# Let's assume the column with text is named "text"
+# If it's named differently, replace "text" with the correct column name
+def get_sentiment(text):
+    blob = TextBlob(str(text))
+    polarity = blob.sentiment.polarity
+    if polarity > 0:
+        return 'Positive'
+    elif polarity == 0:
+        return 'Neutral'
+    else:
+        return 'Negative'
+
+# Apply sentiment analysis
+df['Sentiment'] = df['Text'].apply(get_sentiment)
+
+# Show sentiment distribution
+print(df['Sentiment'].value_counts())
+
+# Plot sentiment distribution
+df['Sentiment'].value_counts().plot(kind='bar', title='Sentiment Analysis')
+plt.xlabel('Sentiment')
+plt.ylabel('Number of Texts')
+plt.show()
